@@ -1,0 +1,13 @@
+class Program
+{
+
+
+    static void Main(string[] args)
+    {
+        float R1 = 15;
+        float R2 = 20;
+        float R = (R1 * R2) / (R1 + R2);
+        Console.WriteLine($"Опір ланцюга-> {R}");
+        Console.ReadKey();
+    }
+
