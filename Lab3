@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        
+        int n = 1000; 
+        List<int> fibonacciNumbers = FindfibonachiNumber(n);
+        Console.WriteLine($"Числа Фібоначчі, менші за {n}:");
+        foreach (int num in fibonacciNumbers)
+        {
+            Console.Write(num + " ");
+        }
+    }
+
+    private static List<int> FindfibonachiNumber(int n) 
+    {
+        List<int> fibonacciNumbers = new List<int>();
+
+        int a = 0, b = 1;
+        while (a < n )
+        {
+            fibonacciNumbers.Add(a);
+            int temp = a;
+            a = b;
+            b = temp + b;
+        }
+
+        return fibonacciNumbers;
+    }
+}
