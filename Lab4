@@ -1,0 +1,55 @@
+using System;
+using System.Text;
+
+public interface ITransaction
+{
+    void ProcessTransaction(); // Метод для обробки транзакції
+}
+
+public class Transaction : ITransaction
+{
+    public int TransactionId { get; set; } // Ідентифікатор транзакції
+    public decimal Amount { get; set; }    // Сума транзакції
+
+    public Transaction(int transactionId, decimal amount)
+    {
+        TransactionId = transactionId;
+        Amount = amount;
+    }
+
+    // Віртуальний метод для обробки транзакції, можна перевизначати в похідних класах
+    public virtual void ProcessTransaction()
+    {
+        Console.WriteLine($"Обробка транзакції #{TransactionId} на суму {Amount}.");
+    }
+}
+
+public class OnlineTransaction : Transaction
+{
+    public string PaymentGateway { get; set; } // Додаткове поле для онлайн транзакції
+
+    public OnlineTransaction(int transactionId, decimal amount, string paymentGateway)
+        : base(transactionId, amount)
+    {
+        PaymentGateway = paymentGateway;
+    }
+
+    // Перевизначення методу для обробки онлайн транзакції
+    public override void ProcessTransaction()
+    {
+        Console.WriteLine($"Обробка онлайн-транзакції #{TransactionId} на суму {Amount} через {PaymentGateway}.");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Console.OutputEncoding = Encoding.UTF8;
+        Transaction regularTransaction = new Transaction(1, 100.50m);
+        regularTransaction.ProcessTransaction(); // Виклик базового методу
+
+        OnlineTransaction onlineTransaction = new OnlineTransaction(2, 200.75m, "PayPal");
+        onlineTransaction.ProcessTransaction();  // Виклик перевизначеного методу
+    }
+}
