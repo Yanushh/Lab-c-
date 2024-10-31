@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+public class MyQueue<T>
+{
+    private LinkedList<T> _items = new LinkedList<T>();
+
+    // Метод для додавання елемента в чергу
+    public void Enqueue(T item)
+    {
+        _items.AddLast(item);
+    }
+
+    // Метод для видалення елемента з черги
+    public T Dequeue()
+    {
+        if (_items.Count == 0)
+            throw new InvalidOperationException("Черга порожня.");
+
+        T value = _items.First.Value;
+        _items.RemoveFirst();
+        return value;
+    }
+
+    // Метод для перевірки першого елемента в черзі
+    public T Peek()
+    {
+        if (_items.Count == 0)
+            throw new InvalidOperationException("Черга порожня.");
+
+        return _items.First.Value;
+    }
+
+    // Метод для перевірки, чи черга порожня
+    public bool IsEmpty()
+    {
+        return _items.Count == 0;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Console.OutputEncoding = Encoding.UTF8;
+        // Створення черги та тестування її методів
+        MyQueue<int> queue = new MyQueue<int>();
+
+        queue.Enqueue(1);
+        queue.Enqueue(2);
+        queue.Enqueue(3);
+
+        Console.WriteLine("Перший елемент: " + queue.Peek()); // Виведе 1
+        Console.WriteLine("Видаляємо елемент: " + queue.Dequeue()); // Видалить і виведе 1
+        Console.WriteLine("Перший елемент після видалення: " + queue.Peek()); // Виведе 2
+        Console.WriteLine("Черга порожня: " + queue.IsEmpty()); // Виведе False
+    }
+}
