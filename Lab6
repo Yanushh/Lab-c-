@@ -1,0 +1,18 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Лямбда-вираз для обчислення квадрата числа
+        Func<int, int> square = x => x * x;
+
+        // Перевірка роботи виразу на кількох числах
+        int[] numbers = { 2, 4, 6, 8, 10 };
+
+        foreach (var number in numbers)
+        {
+            Console.WriteLine($"Квадрат числа {number}: {square(number)}");
+        }
+    }
+}
