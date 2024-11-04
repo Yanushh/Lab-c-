@@ -1,0 +1,71 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class Program
+{
+    public static async Task Main(string[] args) // Це точка входу для програми
+    {
+        var dataLoader = new DataLoader();
+        var cts = new CancellationTokenSource();
+
+        try
+        {
+            // Запускаємо завантаження даних з URL
+            Task<string> loadDataTask = dataLoader.LoadDataAsync("https://example.com/data", cts.Token);
+
+            // Наприклад, скасовуємо операцію через 3 секунди
+            cts.CancelAfter(TimeSpan.FromSeconds(3));
+
+            // Очікуємо результат завантаження
+            string data = await loadDataTask;
+            Console.WriteLine("Дані успішно завантажені:");
+            Console.WriteLine(data);
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("Операція була скасована користувачем.");
+        }
+        finally
+        {
+            cts.Dispose();
+        }
+    }
+}
+
+public class DataLoader
+{
+    private readonly HttpClient _httpClient;
+
+    public DataLoader()
+    {
+        _httpClient = new HttpClient();
+    }
+
+    public async Task<string> LoadDataAsync(string url, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Виконуємо асинхронний запит на отримання даних
+            HttpResponseMessage response = await _httpClient.GetAsync(url, cancellationToken);
+
+            // Перевіряємо, чи успішний запит
+            response.EnsureSuccessStatusCode();
+
+            // Зчитуємо контент у вигляді рядка
+            string data = await response.Content.ReadAsStringAsync();
+
+            return data;
+        }
+        catch (OperationCanceledException)
+        {
+            Console.WriteLine("Завантаження даних було скасовано.");
+            throw;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Помилка при завантаженні даних: {ex.Message}");
+            throw;
+        }
+    }
+}
