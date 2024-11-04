@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
+
+class Program
+{
+    static void Main()
+    {
+        // Створюємо ConcurrentDictionary
+        var dictionary = new ConcurrentDictionary<int, string>();
+
+        // Створюємо масив завдань
+        Task[] tasks = new Task[10];
+
+        // Ініціюємо потоки для додавання значень до словника
+        for (int i = 0; i < tasks.Length; i++)
+        {
+            int taskNum = i; // Зберігаємо поточний номер задачі
+
+            tasks[i] = Task.Run(() =>
+            {
+                for (int j = 0; j < 5; j++)
+                {
+                    int key = taskNum * 10 + j;
+                    string value = $"Значення {key}";
+                    dictionary.TryAdd(key, value);
+                    Console.WriteLine($"Потік {taskNum} додав: [{key} : {value}]");
+                    Thread.Sleep(10); // Затримка для кращої демонстрації роботи потоків
+                }
+            });
+        }
+
+        // Чекаємо завершення всіх потоків
+        Task.WaitAll(tasks);
+
+        // Виводимо всі елементи словника
+        Console.WriteLine("\nЗначення у ConcurrentDictionary:");
+        foreach (var kvp in dictionary)
+        {
+            Console.WriteLine($"Ключ: {kvp.Key}, Значення: {kvp.Value}");
+        }
+    }
+}
